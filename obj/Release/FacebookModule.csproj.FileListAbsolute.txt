@@ -1,0 +1,9 @@
+C:\Websites\dnndev.me\bin\FacebookModule.dll.config
+C:\Websites\dnndev.me\bin\FacebookModule.dll
+C:\Websites\dnndev.me\bin\FacebookModule.pdb
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModule.csprojResolveAssemblyReference.cache
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModuleFacebookModule.App_LocalResources.Settings.resources
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModule.csproj.GenerateResource.Cache
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModule.csproj.CoreCompileInputs.cache
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModule.dll
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Release\FacebookModule.pdb

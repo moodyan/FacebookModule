@@ -1,0 +1,4 @@
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Debug\FacebookModule.csprojResolveAssemblyReference.cache
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Debug\FacebookModuleFacebookModule.App_LocalResources.Settings.resources
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Debug\FacebookModule.csproj.GenerateResource.Cache
+C:\Websites\dnndev.me\DesktopModules\MVC\FacebookModule\obj\Debug\FacebookModule.csproj.CoreCompileInputs.cache

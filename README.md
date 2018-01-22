@@ -25,13 +25,13 @@ You must have your own DotNetNuke website running, as well as a local instance o
 
 **Setup**
 
-1. From GitHub, clone down project repository to your local machine.
+1. From GitHub, clone down project repository to your local machine in this location: C:\Websites\dnndev.me\DesktopModules\MVC
 2. Login and open your DNN website.
 3. Go to Persona Bar > Settings > Extensions.
 4. Click Install Extensions.
 5. Navigate into cloned project repository and open the install folder, then select the folder that ends with _Install.zip
 6. Click through the informational windows and verify that the new extention is in the list.
-7. Drop the module onto your websit page.
+7. Drop the module onto your website page.
 
 ## My Process
 

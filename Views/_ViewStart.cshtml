@@ -6,10 +6,10 @@
     $(document).ready(function () {
         $('#errors').hide();
         $('.loggedIn').hide();
+        $('#successfulPost').hide();
         $.ajaxSetup({ cache: true });
         $.getScript('//connect.facebook.net/en_US/sdk.js', function () {
             FB.init({
-                //MSKE ENV VARIABLES
                 appId: '183652722184096',
                 cookie: true,
                 xfbml: true,
@@ -20,13 +20,13 @@
         });
     });
 
+    //CHECKS LOGIN STATUS
     function checkStatus() {
         $.getScript('//connect.facebook.net/en_US/sdk.js', function () {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
                     // USER IS LOGGED IN TO FACEBOOK, SHOWS PERSONALIZED DIVS
                     $('.loggedIn').show();
-                    $('#loginStatus').html('You are currently logged in.');
                     getProfileData();
                 } else {
                     // USER IS NOT LOGGED IN, HIDES RELEVANT DIVS
@@ -37,8 +37,8 @@
         });
     }
 
+    //CALLS FB API TO POST USER MESSAGE TO FEED
     function submitMessage(e) {
-        //CALLS FB API TO POST USER MESSAGE TO FEED
         var message = $('#message').val();
         FB.api(
             '/me/feed',
@@ -48,7 +48,15 @@
             },
             function (response) {
                 if (response && !response.error) {
-                    $('#postStatus').html('Successful post to your FB feed!');
+                    console.log(message);
+                    $('#postMessage').hide();
+                    $('#successfulPost').show();
+                    if (message.length >= 15) {
+                        var trimmedMess = message.substring(0, 15);
+                        $('#postStatus').html('Success! You posted "' + trimmedMess + '..." to your FB feed!');
+                    } else {
+                        $('#postStatus').html('Success! You posted "' + message + '" to your FB feed!');
+                    }
                 }
                 else {
                     $('#errors').show();
@@ -57,15 +65,38 @@
             }
         );
     }
+    //HIDES POST SUCCESS MESSAGE, SHOWS CLEARED TEXTAREA
+    function showTextarea() {
+        $('#message').val('');
+        $('#postMessage').show();
+        $('#successfulPost').hide();
+    }
 
+    //CALLS FB API TO GET PROFILE INFO
     function getProfileData() {
-        //CALLS FB API TO GET PROFILE INFO
         FB.api('/me',
             'GET',
             function (response) {
                 if (response && !response.error) {
-                    console.log(response);
                     $('#userName').html(response.name);
+                    console.log(response);
+                    //CALLS FB API TO GET PROFILE PHOTO
+                    FB.api(
+                        '/' + response.id +'/picture?type=large',
+                        'GET',
+                        function (response2) {
+                            $('#userPhoto').html('<img src="'+response2.data.url+'">');
+                        }
+                    );
+                    FB.api(
+                        '/me?fields = albums.limit(5),posts.limit(5)',
+                        'GET',
+                        function (response) {
+                            if (response && !response.error) {
+                                console.log(response);
+                            }
+                        }
+                    );
                 }
                 else {
                     $('#errors').show();
@@ -74,9 +105,9 @@
             }
         );
         //CALLS FB API TO GET USER LIKES
-        FB.api('/me/likes', function (response) {
+        FB.api('/me/likes?limit=100', function (response) {
             if (response && !response.error) {
-                //PUTS FIRST 25 LIKES INTO TABLE
+                //PUTS MOST RECENT 100 LIKES INTO TABLE
                 $.each(response.data, function (name, value) {
                     $("#likes").append(('<tr><td><p>' + value.name + '</p></td></tr>').toString());
                 });
@@ -86,44 +117,51 @@
                 $("#error").html(JSON.stringify(response));
             }
         });
+        
     }
 </script>
 
-
-<div class="jumbotron jumbotron-fluid">
-    <h2>Facebook Module</h2>
-</div>
-<div class="container">
-    <h3 class="loggedIn">Welcome, <span id="userName"></span></h3>
-    <fb:login-button scope="public_profile, email, user_hometown, user_likes, publish_actions" autologoutlink="true" onlogin="checkStatus()"></fb:login-button>
-    <p><span id="loginStatus"></span></p>
-  
-    <div class="loggedIn">
-        <div id="profileData">
-            <h4>25 FACEBOOK LIKES</h4>
-            <div id="profileInfo"></div>
-            <div class="table-responsive" style="max-height:300px;max-width:500px;">
-                <table class="table">
-                    <tbody id="likes">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div id="postMessage">
-            <h5>Enter a message to post to your feed:</h5>
-            <div class="container">
-                <textarea class="col-md-5" id="message"></textarea>
-            </div>
-            <div class="container">
-                <button type="button" id="postFeedTxt" class="btn btn-primary" onClick="submitMessage()">POST</button>
-                <br />
-                <p><span id='postStatus'></span></p>
-            </div>
-        </div>
+<div id="border">
+    <div class="jumbotron jumbotron-fluid" id="jumbotron">
+        <center><h1 id="headerTitle">Facebook Module</h1></center>
     </div>
-    <div id='errors'>
-        <div class='alert alert-danger'>
-            <p><span id='error'></span></p>
+    <div class="container" id="body">
+        <center>
+            <h3 class="loggedIn">Welcome, <span id="userName"></span></h3>
+            <div class="loggedIn" id="userPhoto"></div>
+            <fb:login-button scope="public_profile, email, user_hometown, user_likes, publish_actions" autologoutlink="true" onlogin="checkStatus()"></fb:login-button>
+            <p><span id="loginStatus"></span></p>
+        </center>
+
+        <div id='errors'>
+            <div class='alert alert-danger'>
+                <p><span id='error'></span></p>
+            </div>
+        </div>
+        <div class="loggedIn">
+            <div id="profileData" class="likes">
+                <h5>MOST RECENT LIKES</h5>
+                <div id="profileInfo"></div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr id="likes"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="message">
+                <center>
+                    <div id="postMessage">
+                        <h5 class="blue">POST TO YOUR FEED:</h5>
+                        <textarea id="message" placeholder="Enter message here..."></textarea>
+                        <br />
+                        <button type="button" class="btn" onClick="submitMessage()">POST</button>
+                    </div>
+                    <div id="successfulPost">
+                        <h3><span id='postStatus'></span></h3>
+                        <button type="button" class="btn" onClick="showTextarea()">POST AGAIN</button>
+                    </div>
+                </center>
+            </div>
         </div>
     </div>
 </div>
